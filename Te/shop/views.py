@@ -14,7 +14,7 @@ menu = [{'title': "Главная", 'url_name': 'home'},
 
 # Главная Страница .
 class ShopHome(DataMixin, ListView):
-    model = ProductPhoto
+    model = Product
     template_name = 'shop/index.html'
     context_object_name = 'product' 
 
@@ -25,18 +25,18 @@ class ShopHome(DataMixin, ListView):
 
 # Главная Страница - механизм показа категорий.
 class ShopCategory(DataMixin, ListView):
-    model = ProductPhoto
+    model = Product
     template_name = 'shop/index.html'
     context_object_name = 'product'
     allow_empty = False
     
     def get_queryset(self):
-        return ProductPhoto.objects.filter(product__category__slug=self.kwargs['categories_slug'])
+        return Product.objects.filter(category__slug=self.kwargs['categories_slug'])
     
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Катеория - ' + str(context['product'][0].product.category),
-                                              cat_selected=context['product'][0].product.category_id)
+        c_def = self.get_user_context(title='Катеория - ' + str(context['product'][0].category),
+                                              cat_selected=context['product'][0].category_id)
         return dict(list(context.items()) + list(c_def.items()))
     
 #Страница продукта(товара)   
@@ -53,19 +53,6 @@ class ShowProduct(DataMixin, DetailView):
         return dict(list(context.items()) + list(c_def.items()))
     
 
-# Create your views here.
-""" def index(request):
-    #product = Product.objects.all()
-    product = ProductPhoto.objects.all()
-    context = {
-        'product': product,
-        'menu': menu, 
-        'title': 'Главная',
-        'cat_selected': 0,
-        }
-    
-    return render(request, "shop/index.html", context=context) """
-
 def category(request):
     сategory = Category.objects.all()
     context = { 
@@ -75,17 +62,7 @@ def category(request):
         }
     return render(request, "shop/category.html", context=context)
 
-#Разбивка по Slug Категории
-""" def show_categories(request, categories_slug):
-    product = ProductPhoto.objects.filter(product__category__slug=categories_slug)
-    context = {
-        'product': product, 
-        'menu': menu, 
-        'title': '',
-        'cat_selected': categories_slug,
-        }
-    
-    return render(request, "shop/index.html", context=context) """
+
 
 def about(request):
     context = {
@@ -99,6 +76,30 @@ def news(request):
         'title': 'Новости'
         }
     return render(request, "shop/news.html", context=context)
+  
+def cart(request):
+    context = { 
+        'menu': menu, 
+        'title': 'Корзина'
+        }
+    return render(request, "shop/cart.html", context=context)
+
+def pageNotFound(request, exception):
+    return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+
+
+#Разбивка по Slug Категории
+""" def show_categories(request, categories_slug):
+    product = ProductPhoto.objects.filter(product__category__slug=categories_slug)
+    context = {
+        'product': product, 
+        'menu': menu, 
+        'title': '',
+        'cat_selected': categories_slug,
+        }
+    
+    return render(request, "shop/index.html", context=context) """
+    
 #Страница продукта
 """ def product(request, product_slug):
     product = get_object_or_404(ProductPhoto, product__slug=product_slug)
@@ -111,15 +112,18 @@ def news(request):
     }
     return render(request, "shop/product.html", context=context) """
 
-
-
-    
-def cart(request):
-    context = { 
+# Create your views here.
+""" def index(request):
+    #product = Product.objects.all()
+    product = ProductPhoto.objects.all()
+    context = {
+        'product': product,
         'menu': menu, 
-        'title': 'Корзина'
+        'title': 'Главная',
+        'cat_selected': 0,
         }
-    return render(request, "shop/cart.html", context=context)
+    
+    return render(request, "shop/index.html", context=context) """
 
-def pageNotFound(request, exception):
-    return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+
+  
