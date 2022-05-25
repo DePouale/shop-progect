@@ -1,0 +1,20 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<!-- title берем из функции index 'title': 'Главная' -->
+<h1>{{title}}</h1> 
+    <div class="container row row-cols-1 row-cols-md-2 g-4">
+        {% for p in product %}
+                        <div class="col">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <img  class="card-img-top wrap_images" src="{{p.image.url}}" alt="">
+                                    <h5 class="card-title">{{ p.product.name_product}}</h5>
+                                    <p class="card-text">{{ p.product.description_product|linebreaks|truncatewords:50}}</p>
+                                    <a href="{{ p.product.get_absolute_url }}" class="btn btn-primary">Купить</a>
+                                </div> 
+                            </div>
+                        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

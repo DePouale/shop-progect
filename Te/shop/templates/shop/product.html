@@ -1,0 +1,26 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<h1>{{product.product}}</h1>
+<!-- <figure class="figure">
+    <img src="{{product.image.url}}" class="figure-img img-fluid rounded" alt="...">
+    <figcaption class="figure-caption">A caption for the above image.</figcaption>
+  </figure>
+<img  class="card-img-top wrap_images" src="{{product.image.url}}" alt="">
+<p>{{product.product.description_product|linebreaks}}</p>
+<a href="#" class="btn btn-primary">Купить</a> -->
+
+
+<div class="container row row-cols-1 row-cols-md-2 g-4">
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <img  class="card-img-top wrap_images" src="{{product.image.url}}" alt="">
+                            </div>
+                        </div>
+                    </div>
+</div>
+<p class="card-text">{{product.product.description_product|linebreaks}}</p> 
+
+{% endblock %}
+
